@@ -34,6 +34,7 @@
                 android:minHeight="48dp"
                 android:textColor="@color/black"
                 android:textColorHint="@color/black"
+                android:maxLength="8"
                 tools:hint="4571 7360"
                 tools:ignore="LabelFor" />
 

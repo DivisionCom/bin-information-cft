@@ -60,47 +60,52 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun parseCardData(result: String) {
-        val mainObject = JSONObject(result)
-        val item = CardModel(
-            getCardData(mainObject, "number", "length", true),
-            getCardData(mainObject, "number", "luhn", true),
-            getCardData(mainObject, "", "scheme", false),
-            getCardData(mainObject, "", "type", false),
-            getCardData(mainObject, "", "brand", false),
-            getCardData(mainObject, "", "prepaid", false),
-            getCardData(mainObject, "country", "numeric", true),
-            getCardData(mainObject, "country", "alpha2", true),
-            getCardData(mainObject, "country", "name", true),
-            getCardData(mainObject, "country", "emoji", true),
-            getCardData(mainObject, "country", "currency", true),
-            getCardData(mainObject, "country", "latitude", true),
-            getCardData(mainObject, "country", "longitude", true),
-            getCardData(mainObject, "bank", "name", true),
-            getCardData(mainObject, "bank", "url", true),
-            getCardData(mainObject, "bank", "phone", true),
-            getCardData(mainObject, "bank", "city", true),
-        )
-        binding.tvTextCountry.text = getString(
-            R.string.tvTextCountryAlpha2NameCurrency,
-            item.countryAlpha2,
-            item.countryName,
-            item.countryCurrency
-        )
-        binding.tvTextBank.text = getString(
-            R.string.tvTextBankNameCity,
-            item.bankName,
-            item.bankCity
-        )
-        binding.tvTextBrand.text = item.brand
-        binding.tvTextLatitude.text = item.countryLatitude
-        binding.tvTextLongitude.text = item.countryLongitude
-        binding.tvTextLength.text = item.length
-        binding.tvTextLuhn.text = item.luhn
-        binding.tvTextPhone.text = item.bankPhone
-        binding.tvTextPrepaid.text = item.prepaid
-        binding.tvTextScheme.text = item.scheme
-        binding.tvTextType.text = item.type
-        binding.tvTextUrl.text = item.bankUrl
+        try {
+            val mainObject = JSONObject(result)
+            val item = CardModel(
+                getCardData(mainObject, "number", "length", true),
+                getCardData(mainObject, "number", "luhn", true),
+                getCardData(mainObject, "", "scheme", false),
+                getCardData(mainObject, "", "type", false),
+                getCardData(mainObject, "", "brand", false),
+                getCardData(mainObject, "", "prepaid", false),
+                getCardData(mainObject, "country", "numeric", true),
+                getCardData(mainObject, "country", "alpha2", true),
+                getCardData(mainObject, "country", "name", true),
+                getCardData(mainObject, "country", "emoji", true),
+                getCardData(mainObject, "country", "currency", true),
+                getCardData(mainObject, "country", "latitude", true),
+                getCardData(mainObject, "country", "longitude", true),
+                getCardData(mainObject, "bank", "name", true),
+                getCardData(mainObject, "bank", "url", true),
+                getCardData(mainObject, "bank", "phone", true),
+                getCardData(mainObject, "bank", "city", true),
+            )
+            binding.tvTextCountry.text = getString(
+                R.string.tvTextCountryAlpha2NameCurrency,
+                item.countryAlpha2,
+                item.countryName,
+                item.countryCurrency
+            )
+            binding.tvTextBank.text = getString(
+                R.string.tvTextBankNameCity,
+                item.bankName,
+                item.bankCity
+            )
+            binding.tvTextBrand.text = item.brand
+            binding.tvTextLatitude.text = item.countryLatitude
+            binding.tvTextLongitude.text = item.countryLongitude
+            binding.tvTextLength.text = item.length
+            binding.tvTextLuhn.text = item.luhn
+            binding.tvTextPhone.text = item.bankPhone
+            binding.tvTextPrepaid.text = item.prepaid
+            binding.tvTextScheme.text = item.scheme
+            binding.tvTextType.text = item.type
+            binding.tvTextUrl.text = item.bankUrl
+        } catch (ex: Exception) {
+            val toast = Toast.makeText(applicationContext, ex.toString(), Toast.LENGTH_SHORT)
+            toast.show()
+        }
     }
 
     private fun getCardData(
@@ -140,7 +145,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-        } catch (ex: java.lang.Exception) {
+        } catch (ex: Exception) {
             validatedData = ""
             val toast = Toast.makeText(this, ex.toString(), Toast.LENGTH_SHORT)
             toast.show()

@@ -187,7 +187,7 @@ class MainActivity : AppCompatActivity() {
         return validatedData
     }
 
-    fun goToMap () {
+    fun goToMap (view: View) {
         val sLatitude = item.countryLatitude
         val sLongitude = item.countryLongitude
         val url = "geo:$sLatitude,$sLongitude?z=22&q=$sLatitude,$sLongitude"

@@ -38,6 +38,10 @@ class MainActivity : AppCompatActivity() {
         binding.etInput.hint = "4571 7360"
         requestCardData("45717360")
 
+        updateInformation()
+    }
+
+    private fun updateInformation() {
         binding.etInput.addTextChangedListener(object : TextWatcher {
 
             override fun afterTextChanged(s: Editable) {

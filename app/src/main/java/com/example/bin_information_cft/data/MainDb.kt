@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database (entities = [DbItem::class], version = 1)
+@Database(entities = [DbItem::class], version = 2)
 abstract class MainDb : RoomDatabase() {
     abstract fun getDao(): Dao
 
@@ -14,8 +14,10 @@ abstract class MainDb : RoomDatabase() {
             return Room.databaseBuilder(
                 context.applicationContext,
                 MainDb::class.java,
-                "din.db"
-            ).build()
+                "bin.db"
+            )
+                .fallbackToDestructiveMigration()
+                .build()
         }
     }
 }

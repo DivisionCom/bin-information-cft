@@ -10,10 +10,13 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.bin_information_cft.adapters.CardModel
+import com.example.bin_information_cft.data.DbItem
+import com.example.bin_information_cft.data.MainDb
 import com.example.bin_information_cft.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -49,7 +52,9 @@ class MainActivity : AppCompatActivity() {
                     delay(3000)
                     when (binding.etInput.text.toString()) {
                         "" -> requestCardData("45717360")
-                        else -> requestCardData(s.toString())
+                        else -> {
+                            requestCardData(s.toString())
+                        }
                     }
                 }
             }
@@ -64,6 +69,27 @@ class MainActivity : AppCompatActivity() {
                 bin: CharSequence, start: Int,
                 before: Int, count: Int
             ) {
+                saveRequests()
+            }
+        })
+    }
+
+    private fun saveRequests() {
+        val text = binding.etInput.text
+        val db = MainDb.getDb(this)
+        val request = DbItem(
+            null,
+            text.toString()
+        )
+        val requestLiveData = MainDb.getDb(this).getDao().getItem(text.toString())
+
+        requestLiveData.observe(this, Observer { requests ->
+            when (binding.etInput.length()) {
+                8 -> if (requests == null) {
+                    Thread {
+                        db.getDao().insertItem(request)
+                    }.start()
+                }
             }
         })
     }
@@ -191,7 +217,7 @@ class MainActivity : AppCompatActivity() {
         return validatedData
     }
 
-    fun goToMap (view: View) {
+    fun goToMap(view: View) {
         val sLatitude = item.countryLatitude
         val sLongitude = item.countryLongitude
         val url = "geo:$sLatitude,$sLongitude?z=22&q=$sLatitude,$sLongitude"

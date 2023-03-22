@@ -37,23 +37,63 @@ class MainActivity : AppCompatActivity() {
     private fun parseCardData(result: String) {
         val mainObject = JSONObject(result)
         val item = CardModel(
-            mainObject.getJSONObject("number").getString("length"),
-            mainObject.getJSONObject("number").getString("luhn"),
-            mainObject.getString("scheme"),
-            mainObject.getString("type"),
-            mainObject.getString("brand"),
-            mainObject.getString("prepaid"),
-            mainObject.getJSONObject("country").getString("numeric"),
-            mainObject.getJSONObject("country").getString("alpha2"),
-            mainObject.getJSONObject("country").getString("name"),
-            mainObject.getJSONObject("country").getString("emoji"),
-            mainObject.getJSONObject("country").getString("currency"),
-            mainObject.getJSONObject("country").getString("latitude"),
-            mainObject.getJSONObject("country").getString("longitude"),
-            mainObject.getJSONObject("bank").getString("name"),
-            mainObject.getJSONObject("bank").getString("url"),
-            mainObject.getJSONObject("bank").getString("phone"),
-            mainObject.getJSONObject("bank").getString("city"),
+            getCardData(mainObject, "number", "length", true),
+            getCardData(mainObject, "number", "luhn", true),
+            getCardData(mainObject, "", "scheme", false),
+            getCardData(mainObject, "", "type", false),
+            getCardData(mainObject, "", "brand", false),
+            getCardData(mainObject, "", "prepaid", false),
+            getCardData(mainObject, "country", "numeric", true),
+            getCardData(mainObject, "country", "alpha2", true),
+            getCardData(mainObject, "country", "name", true),
+            getCardData(mainObject, "country", "emoji", true),
+            getCardData(mainObject, "country", "currency", true),
+            getCardData(mainObject, "country", "latitude", true),
+            getCardData(mainObject, "country", "longitude", true),
+            getCardData(mainObject, "bank", "name", true),
+            getCardData(mainObject, "bank", "url", true),
+            getCardData(mainObject, "bank", "phone", true),
+            getCardData(mainObject, "bank", "city", true),
         )
     }
+
+    private fun getCardData(
+        mainObject: JSONObject,
+        jsonObject: String,
+        jsonString: String,
+        getJSONobj: Boolean
+    ): String {
+        val validatedData: String
+        when (getJSONobj) {
+            true -> {
+                validatedData = when {
+                    mainObject.has(jsonObject) -> {
+                        when {
+                            mainObject.getJSONObject(jsonObject).has(jsonString) -> {
+                                mainObject.getJSONObject(jsonObject).getString(jsonString)
+                            }
+                            else -> {
+                                ""
+                            }
+                        }
+                    }
+                    else -> {
+                        ""
+                    }
+                }
+            }
+            false -> {
+                validatedData = when {
+                    mainObject.has(jsonString) -> {
+                        mainObject.getString(jsonString)
+                    }
+                    else -> {
+                        ""
+                    }
+                }
+            }
+        }
+        return validatedData
+    }
+
 }

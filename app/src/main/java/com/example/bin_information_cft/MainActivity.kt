@@ -1,11 +1,15 @@
 package com.example.bin_information_cft
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
+import android.graphics.Paint
+import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
@@ -17,9 +21,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var item: CardModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +33,8 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        binding.tvTextLatitude.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+        binding.tvTextLongitude.paintFlags = Paint.UNDERLINE_TEXT_FLAG
         binding.etInput.hint = "4571 7360"
         requestCardData("45717360")
 
@@ -76,7 +84,7 @@ class MainActivity : AppCompatActivity() {
     private fun parseCardData(result: String) {
         try {
             val mainObject = JSONObject(result)
-            val item = CardModel(
+            item = CardModel(
                 getCardData(mainObject, "number", "length", true),
                 getCardData(mainObject, "number", "luhn", true),
                 getCardData(mainObject, "", "scheme", false),
@@ -108,8 +116,6 @@ class MainActivity : AppCompatActivity() {
                 item.bankCity
             )
             binding.tvTextBrand.text = item.brand
-            binding.tvTextLatitude.text = item.countryLatitude
-            binding.tvTextLongitude.text = item.countryLongitude
             binding.tvTextLength.text = item.length
             binding.tvTextLuhn.text = item.luhn
             binding.tvTextPhone.text = item.bankPhone
@@ -117,6 +123,8 @@ class MainActivity : AppCompatActivity() {
             binding.tvTextScheme.text = item.scheme
             binding.tvTextType.text = item.type
             binding.tvTextUrl.text = item.bankUrl
+            binding.tvTextLatitude.text = item.countryLatitude
+            binding.tvTextLongitude.text = item.countryLongitude
         } catch (ex: Exception) {
             val toast =
                 Toast.makeText(applicationContext, "Произошла ошибка!", Toast.LENGTH_SHORT)
@@ -179,4 +187,11 @@ class MainActivity : AppCompatActivity() {
         return validatedData
     }
 
+    fun goToMap () {
+        val sLatitude = item.countryLatitude
+        val sLongitude = item.countryLongitude
+        val url = "geo:$sLatitude,$sLongitude?z=22&q=$sLatitude,$sLongitude"
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+        startActivity(intent)
+    }
 }

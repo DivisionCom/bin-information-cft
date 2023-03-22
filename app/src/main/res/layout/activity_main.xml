@@ -228,6 +228,8 @@
                 android:alpha="0.8"
                 android:gravity="center"
                 android:textSize="11sp"
+                android:textColor="@color/blue"
+                android:onClick="goToMap"
                 tools:text="\?"
                 app:layout_constraintStart_toEndOf="@id/tv_label_latitude"
                 app:layout_constraintTop_toBottomOf="@id/tv_text_country" />
@@ -250,6 +252,8 @@
                 android:alpha="0.8"
                 android:gravity="center"
                 android:textSize="11sp"
+                android:textColor="@color/blue"
+                android:onClick="goToMap"
                 tools:text="\?"
                 app:layout_constraintStart_toEndOf="@id/tv_label_longitude"
                 app:layout_constraintTop_toBottomOf="@id/tv_text_country" />
@@ -301,6 +305,8 @@
                 android:layout_height="wrap_content"
                 android:textSize="11sp"
                 android:alpha="0.8"
+                android:autoLink="web"
+                android:textColorLink="@color/blue"
                 tools:text="\?"
                 app:layout_constraintTop_toBottomOf="@id/tv_text_bank"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -311,6 +317,8 @@
                 android:layout_height="wrap_content"
                 android:textSize="11sp"
                 android:alpha="0.8"
+                android:autoLink="phone"
+                android:textColorLink="@color/blue"
                 tools:text="\?"
                 app:layout_constraintTop_toBottomOf="@id/tv_text_url"
                 app:layout_constraintStart_toStartOf="parent" />

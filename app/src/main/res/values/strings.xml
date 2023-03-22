@@ -13,4 +13,6 @@
     <string name="tv_label_brace">)</string>
     <string name="tv_label_bank">BANK</string>
     <string name="tv_label_country">COUNTRY</string>
+    <string name="tvTextBankNameCity">%s, %s</string>
+    <string name="tvTextCountryAlpha2NameCurrency">%s, %s, %s</string>
 </resources>

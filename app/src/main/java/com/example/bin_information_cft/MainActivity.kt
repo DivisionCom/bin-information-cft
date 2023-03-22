@@ -34,10 +34,10 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onTextChanged(
-                s: CharSequence, start: Int,
+                bin: CharSequence, start: Int,
                 before: Int, count: Int
             ) {
-                requestCardData(s.toString())
+                requestCardData(bin.toString())
             }
         })
     }
@@ -80,7 +80,27 @@ class MainActivity : AppCompatActivity() {
             getCardData(mainObject, "bank", "phone", true),
             getCardData(mainObject, "bank", "city", true),
         )
-        binding.tvTextCountry.text = item.countryName
+        binding.tvTextCountry.text = getString(
+            R.string.tvTextCountryAlpha2NameCurrency,
+            item.countryAlpha2,
+            item.countryName,
+            item.countryCurrency
+        )
+        binding.tvTextBank.text = getString(
+            R.string.tvTextBankNameCity,
+            item.bankName,
+            item.bankCity
+        )
+        binding.tvTextBrand.text = item.brand
+        binding.tvTextLatitude.text = item.countryLatitude
+        binding.tvTextLongitude.text = item.countryLongitude
+        binding.tvTextLength.text = item.length
+        binding.tvTextLuhn.text = item.luhn
+        binding.tvTextPhone.text = item.bankPhone
+        binding.tvTextPrepaid.text = item.prepaid
+        binding.tvTextScheme.text = item.scheme
+        binding.tvTextType.text = item.type
+        binding.tvTextUrl.text = item.bankUrl
     }
 
     private fun getCardData(

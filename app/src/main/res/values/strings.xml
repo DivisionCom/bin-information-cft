@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">bin-information-cft</string>
+    <string name="hint_input">Enter the first digits of a card number (BIN/IIN)</string>
+    <string name="tv_label_scheme">SCHEME / NETWORK</string>
+    <string name="tv_label_brand">BRAND</string>
+    <string name="tv_label_card_number">CARD NUMBER</string>
+    <string name="tv_label_luhn">LUHN</string>
+    <string name="tv_label_length">LENGTH</string>
+    <string name="tv_label_type">TYPE</string>
+    <string name="tv_label_prepaid">PREPAID</string>
+    <string name="tv_label_latitude">(latitude: </string>
+    <string name="tv_label_longitude">, longitude: </string>
+    <string name="tv_label_brace">)</string>
+    <string name="tv_label_bank">BANK</string>
+    <string name="tv_label_country">COUNTRY</string>
 </resources>

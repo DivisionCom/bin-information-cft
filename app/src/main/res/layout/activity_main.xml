@@ -1,18 +1,321 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:layout_height="wrap_content">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_marginVertical="10dp"
+        android:layout_marginHorizontal="10dp"
+        android:orientation="vertical">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <LinearLayout
+            android:id="@+id/ll_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <EditText
+                android:id="@+id/et_input"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:autofillHints="4571 7360"
+                android:backgroundTint="#BFFFFFFF"
+                android:gravity="center"
+                android:inputType="number"
+                android:minHeight="48dp"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                tools:hint="4571 7360"
+                tools:ignore="LabelFor" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/hint_input"
+                android:textSize="14sp"
+                android:alpha="0.6"
+                android:gravity="center" />
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/ll_input"
+            android:layout_marginVertical="40dp"
+            android:layout_marginHorizontal="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                android:id="@+id/tv_label_scheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tv_label_scheme"
+                android:alpha="0.6"
+                android:gravity="center"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:id="@+id/tv_text_scheme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.6"
+                app:layout_constraintTop_toBottomOf="@id/tv_label_scheme"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="\?" />
+
+            <TextView
+                android:id="@+id/tv_label_brand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.6"
+                android:gravity="center"
+                android:text="@string/tv_label_brand"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_text_scheme" />
+
+            <TextView
+                android:id="@+id/tv_text_brand"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:alpha="0.6"
+                app:layout_constraintTop_toBottomOf="@id/tv_label_brand"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="\?" />
+
+            <TextView
+                android:id="@+id/tv_label_card_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.6"
+                android:gravity="center"
+                android:text="@string/tv_label_card_number"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_text_brand" />
+
+            <TextView
+                android:id="@+id/tv_label_length"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tv_label_length"
+                android:textSize="11sp"
+                android:alpha="0.6"
+                app:layout_constraintTop_toBottomOf="@id/tv_label_card_number"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_text_length"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.6"
+                app:layout_constraintTop_toBottomOf="@id/tv_label_length"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="\?"/>
+
+            <TextView
+                android:id="@+id/tv_label_luhn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tv_label_luhn"
+                android:textSize="11sp"
+                android:alpha="0.6"
+                android:layout_marginStart="60dp"
+                app:layout_constraintTop_toBottomOf="@id/tv_label_card_number"
+                app:layout_constraintStart_toEndOf="@id/tv_label_length" />
+
+            <TextView
+                android:id="@+id/tv_text_luhn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.6"
+                app:layout_constraintTop_toBottomOf="@id/tv_label_luhn"
+                app:layout_constraintStart_toStartOf="@id/tv_label_luhn"
+                tools:text="\?"/>
+
+            <TextView
+                android:id="@+id/tv_label_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tv_label_type"
+                android:alpha="0.6"
+                android:gravity="center"
+                android:layout_marginStart="60dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tv_label_scheme"/>
+
+            <TextView
+                android:id="@+id/tv_text_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.6"
+                app:layout_constraintTop_toBottomOf="@id/tv_label_type"
+                app:layout_constraintStart_toStartOf="@id/tv_label_type"
+                tools:text="\?" />
+
+            <TextView
+                android:id="@+id/tv_label_prepaid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.6"
+                android:gravity="center"
+                android:text="@string/tv_label_prepaid"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="@id/tv_text_type"
+                app:layout_constraintTop_toBottomOf="@id/tv_text_type" />
+
+            <TextView
+                android:id="@+id/tv_text_prepaid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.6"
+                app:layout_constraintStart_toStartOf="@id/tv_label_prepaid"
+                app:layout_constraintTop_toBottomOf="@id/tv_label_prepaid"
+                tools:text="\?" />
+
+            <TextView
+                android:id="@+id/tv_label_country"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.6"
+                android:gravity="center"
+                android:text="@string/tv_label_country"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="@id/tv_text_prepaid"
+                app:layout_constraintTop_toBottomOf="@id/tv_text_prepaid"  />
+
+            <TextView
+                android:id="@+id/tv_text_country"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.6"
+                app:layout_constraintTop_toBottomOf="@id/tv_label_country"
+                app:layout_constraintStart_toStartOf="@id/tv_label_country"
+                tools:text="\?" />
+
+            <TextView
+                android:id="@+id/tv_label_latitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.6"
+                android:gravity="center"
+                android:text="@string/tv_label_latitude"
+                android:textSize="11sp"
+                app:layout_constraintStart_toStartOf="@id/tv_text_country"
+                app:layout_constraintTop_toBottomOf="@id/tv_text_country"  />
+
+            <TextView
+                android:id="@+id/tv_text_latitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.6"
+                android:gravity="center"
+                android:textSize="11sp"
+                tools:text="\?"
+                app:layout_constraintStart_toEndOf="@id/tv_label_latitude"
+                app:layout_constraintTop_toBottomOf="@id/tv_text_country" />
+
+            <TextView
+                android:id="@+id/tv_label_longitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.6"
+                android:gravity="center"
+                android:text="@string/tv_label_longitude"
+                android:textSize="11sp"
+                app:layout_constraintStart_toEndOf="@id/tv_text_latitude"
+                app:layout_constraintTop_toBottomOf="@id/tv_text_country"  />
+
+            <TextView
+                android:id="@+id/tv_text_longitude"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.6"
+                android:gravity="center"
+                android:textSize="11sp"
+                tools:text="\?"
+                app:layout_constraintStart_toEndOf="@id/tv_label_longitude"
+                app:layout_constraintTop_toBottomOf="@id/tv_text_country" />
+
+            <TextView
+                android:id="@+id/tv_label_brace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.6"
+                android:gravity="center"
+                android:text="@string/tv_label_brace"
+                android:textSize="11sp"
+                app:layout_constraintStart_toEndOf="@id/tv_text_longitude"
+                app:layout_constraintTop_toBottomOf="@id/tv_text_country"  />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@color/black"
+                android:backgroundTint="@color/black"
+                app:layout_constraintGuide_percent="0.7"/>
+
+            <TextView
+                android:id="@+id/tv_label_bank"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.6"
+                android:gravity="center"
+                android:text="@string/tv_label_bank"
+                android:layout_marginTop="10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/guideline" />
+
+            <TextView
+                android:id="@+id/tv_text_bank"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="11sp"
+                android:alpha="0.6"
+                tools:text="\?"
+                app:layout_constraintTop_toBottomOf="@id/tv_label_bank"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_text_url"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="11sp"
+                android:alpha="0.6"
+                tools:text="\?"
+                app:layout_constraintTop_toBottomOf="@id/tv_text_bank"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_text_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="11sp"
+                android:alpha="0.6"
+                tools:text="\?"
+                app:layout_constraintTop_toBottomOf="@id/tv_text_url"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    </LinearLayout>
+
+</ScrollView>

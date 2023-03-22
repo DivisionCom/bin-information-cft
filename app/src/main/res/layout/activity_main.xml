@@ -204,6 +204,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:alpha="0.8"
+                android:maxWidth="150dp"
+                android:singleLine="false"
                 app:layout_constraintTop_toBottomOf="@id/tv_label_country"
                 app:layout_constraintStart_toStartOf="@id/tv_label_country"
                 tools:text="\?" />

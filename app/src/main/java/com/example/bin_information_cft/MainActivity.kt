@@ -11,6 +11,10 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.bin_information_cft.adapters.CardModel
 import com.example.bin_information_cft.databinding.ActivityMainBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {
@@ -23,9 +27,20 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        binding.etInput.hint = "4571 7360"
+        requestCardData("45717360")
+
         binding.etInput.addTextChangedListener(object : TextWatcher {
 
-            override fun afterTextChanged(s: Editable) {}
+            override fun afterTextChanged(s: Editable) {
+                CoroutineScope(Dispatchers.IO).launch {
+                    delay(3000)
+                    when (binding.etInput.text.toString()) {
+                        "" -> requestCardData("45717360")
+                        else -> requestCardData(s.toString())
+                    }
+                }
+            }
 
             override fun beforeTextChanged(
                 s: CharSequence, start: Int,
@@ -37,7 +52,6 @@ class MainActivity : AppCompatActivity() {
                 bin: CharSequence, start: Int,
                 before: Int, count: Int
             ) {
-                requestCardData(bin.toString())
             }
         })
     }
@@ -81,6 +95,7 @@ class MainActivity : AppCompatActivity() {
                 getCardData(mainObject, "bank", "phone", true),
                 getCardData(mainObject, "bank", "city", true),
             )
+
             binding.tvTextCountry.text = getString(
                 R.string.tvTextCountryAlpha2NameCurrency,
                 item.countryAlpha2,
@@ -103,7 +118,8 @@ class MainActivity : AppCompatActivity() {
             binding.tvTextType.text = item.type
             binding.tvTextUrl.text = item.bankUrl
         } catch (ex: Exception) {
-            val toast = Toast.makeText(applicationContext, ex.toString(), Toast.LENGTH_SHORT)
+            val toast =
+                Toast.makeText(applicationContext, "Произошла ошибка!", Toast.LENGTH_SHORT)
             toast.show()
         }
     }
@@ -147,8 +163,17 @@ class MainActivity : AppCompatActivity() {
             }
         } catch (ex: Exception) {
             validatedData = ""
-            val toast = Toast.makeText(this, ex.toString(), Toast.LENGTH_SHORT)
+            val toast = Toast.makeText(this, "Произошла ошибка!", Toast.LENGTH_SHORT)
             toast.show()
+        }
+
+        when (validatedData) {
+            "true" -> validatedData = "Yes"
+            "false" -> validatedData = "No"
+            "visa" -> validatedData = "Visa"
+            "mastercard" -> validatedData = "Mastercard"
+            "debit" -> validatedData = "Debit"
+            "credit" -> validatedData = "Credit"
         }
 
         return validatedData

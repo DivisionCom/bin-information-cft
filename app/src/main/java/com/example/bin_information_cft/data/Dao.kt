@@ -11,9 +11,9 @@ interface Dao {
     @Insert (onConflict = OnConflictStrategy.IGNORE)
     fun insertItem(item: DbItem)
 
-    @Query("SELECT * FROM requests")
-    fun getAllItems(): Flow<List<DbItem>>
-
     @Query("SELECT * FROM requests WHERE name LIKE :name")
     fun getItem(name: String) : LiveData<DbItem>
+
+    @Query("SELECT name FROM requests")
+    suspend fun requestsList() : Array<String>
 }

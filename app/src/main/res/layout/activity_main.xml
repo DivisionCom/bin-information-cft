@@ -22,7 +22,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <EditText
+            <AutoCompleteTextView
                 android:id="@+id/et_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
                 android:textColor="@color/black"
                 android:textColorHint="@color/black"
                 android:maxLength="8"
-                tools:hint="4571 7360"
+                android:hint="@string/default_bin"
                 tools:ignore="LabelFor" />
 
             <TextView

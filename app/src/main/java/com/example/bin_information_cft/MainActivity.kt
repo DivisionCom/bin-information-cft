@@ -1,16 +1,17 @@
 package com.example.bin_information_cft
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
+import androidx.lifecycle.*
 import com.android.volley.Request
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
@@ -29,6 +30,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var item: CardModel
+    private var requests: Array<String> = emptyArray()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,29 +40,59 @@ class MainActivity : AppCompatActivity() {
 
         binding.tvTextLatitude.paintFlags = Paint.UNDERLINE_TEXT_FLAG
         binding.tvTextLongitude.paintFlags = Paint.UNDERLINE_TEXT_FLAG
-        binding.etInput.hint = "4571 7360"
-        requestCardData("45717360")
 
+        requestCardData(DEFAULT_BIN)
+
+        updateRequestList()
         updateInformation()
     }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private fun updateRequestList() {
+        lifecycleScope.launch {
+            requests = MainDb.getDb(this@MainActivity).getDao().requestsList()
+            val adapter: ArrayAdapter<String> = ArrayAdapter(
+                this@MainActivity,
+                android.R.layout.simple_dropdown_item_1line,
+                requests.toList()
+            )
+            with(binding) {
+                etInput.setAdapter(adapter)
+                etInput.threshold = 1
+
+                etInput.setOnTouchListener { _, _ ->
+                    when {
+                        requests.isNotEmpty() -> {
+                            // show all suggestions
+                            when {
+                                etInput.text.toString() != EMPTY_STRING_VALUE -> adapter.filter
+                                    .filter(null)
+                            }
+                            etInput.showDropDown()
+                        }
+                    }
+                    false
+                }
+            }
+        }
+    }
+
 
     private fun updateInformation() {
         binding.etInput.addTextChangedListener(object : TextWatcher {
 
-            override fun afterTextChanged(s: Editable) {
+            override fun afterTextChanged(bin: Editable) {
                 CoroutineScope(Dispatchers.IO).launch {
                     delay(3000)
                     when (binding.etInput.text.toString()) {
-                        "" -> requestCardData("45717360")
-                        else -> {
-                            requestCardData(s.toString())
-                        }
+                        EMPTY_STRING_VALUE -> requestCardData(DEFAULT_BIN)
+                        else -> requestCardData(bin.toString())
                     }
                 }
             }
 
             override fun beforeTextChanged(
-                s: CharSequence, start: Int,
+                bin: CharSequence, start: Int,
                 count: Int, after: Int
             ) {
             }
@@ -88,6 +120,7 @@ class MainActivity : AppCompatActivity() {
                 8 -> if (requests == null) {
                     Thread {
                         db.getDao().insertItem(request)
+                        updateRequestList()
                     }.start()
                 }
             }
@@ -95,8 +128,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun requestCardData(bin: String) {
-        val url = "https://lookup.binlist.net/" +
-                bin
+        val url = URL + bin
         val queue = Volley.newRequestQueue(this)
         val request = StringRequest(
             Request.Method.GET,
@@ -105,7 +137,8 @@ class MainActivity : AppCompatActivity() {
                 parseCardData(result)
             },
             { error ->
-                Log.d("MyLog", "Error: $error")
+                Toast.makeText(this, getString(R.string.error), Toast.LENGTH_SHORT)
+                    .show()
             }
         )
         queue.add(request)
@@ -115,50 +148,51 @@ class MainActivity : AppCompatActivity() {
         try {
             val mainObject = JSONObject(result)
             item = CardModel(
-                getCardData(mainObject, "number", "length", true),
-                getCardData(mainObject, "number", "luhn", true),
-                getCardData(mainObject, "", "scheme", false),
-                getCardData(mainObject, "", "type", false),
-                getCardData(mainObject, "", "brand", false),
-                getCardData(mainObject, "", "prepaid", false),
-                getCardData(mainObject, "country", "numeric", true),
-                getCardData(mainObject, "country", "alpha2", true),
-                getCardData(mainObject, "country", "name", true),
-                getCardData(mainObject, "country", "emoji", true),
-                getCardData(mainObject, "country", "currency", true),
-                getCardData(mainObject, "country", "latitude", true),
-                getCardData(mainObject, "country", "longitude", true),
-                getCardData(mainObject, "bank", "name", true),
-                getCardData(mainObject, "bank", "url", true),
-                getCardData(mainObject, "bank", "phone", true),
-                getCardData(mainObject, "bank", "city", true),
+                getCardData(mainObject, JSON_KEY_NUMBER, "length", true),
+                getCardData(mainObject, JSON_KEY_NUMBER, "luhn", true),
+                getCardData(mainObject, EMPTY_STRING_VALUE, "scheme", false),
+                getCardData(mainObject, EMPTY_STRING_VALUE, "type", false),
+                getCardData(mainObject, EMPTY_STRING_VALUE, "brand", false),
+                getCardData(mainObject, EMPTY_STRING_VALUE, "prepaid", false),
+                getCardData(mainObject, JSON_KEY_COUNTRY, "numeric", true),
+                getCardData(mainObject, JSON_KEY_COUNTRY, "alpha2", true),
+                getCardData(mainObject, JSON_KEY_COUNTRY, "name", true),
+                getCardData(mainObject, JSON_KEY_COUNTRY, "emoji", true),
+                getCardData(mainObject, JSON_KEY_COUNTRY, "currency", true),
+                getCardData(mainObject, JSON_KEY_COUNTRY, "latitude", true),
+                getCardData(mainObject, JSON_KEY_COUNTRY, "longitude", true),
+                getCardData(mainObject, JSON_KEY_BANK, "name", true),
+                getCardData(mainObject, JSON_KEY_BANK, "url", true),
+                getCardData(mainObject, JSON_KEY_BANK, "phone", true),
+                getCardData(mainObject, JSON_KEY_BANK, "city", true),
             )
 
-            binding.tvTextCountry.text = getString(
-                R.string.tvTextCountryAlpha2NameCurrency,
-                item.countryAlpha2,
-                item.countryName,
-                item.countryCurrency
-            )
-            binding.tvTextBank.text = getString(
-                R.string.tvTextBankNameCity,
-                item.bankName,
-                item.bankCity
-            )
-            binding.tvTextBrand.text = item.brand
-            binding.tvTextLength.text = item.length
-            binding.tvTextLuhn.text = item.luhn
-            binding.tvTextPhone.text = item.bankPhone
-            binding.tvTextPrepaid.text = item.prepaid
-            binding.tvTextScheme.text = item.scheme
-            binding.tvTextType.text = item.type
-            binding.tvTextUrl.text = item.bankUrl
-            binding.tvTextLatitude.text = item.countryLatitude
-            binding.tvTextLongitude.text = item.countryLongitude
+            with(binding) {
+                tvTextCountry.text = getString(
+                    R.string.tvTextCountryAlpha2NameCurrency,
+                    item.countryAlpha2,
+                    item.countryName,
+                    item.countryCurrency
+                )
+                tvTextBank.text = getString(
+                    R.string.tvTextBankNameCity,
+                    item.bankName,
+                    item.bankCity
+                )
+                tvTextBrand.text = item.brand
+                tvTextLength.text = item.length
+                tvTextLuhn.text = item.luhn
+                tvTextPhone.text = item.bankPhone
+                tvTextPrepaid.text = item.prepaid
+                tvTextScheme.text = item.scheme
+                tvTextType.text = item.type
+                tvTextUrl.text = item.bankUrl
+                tvTextLatitude.text = item.countryLatitude
+                tvTextLongitude.text = item.countryLongitude
+            }
         } catch (ex: Exception) {
-            val toast =
-                Toast.makeText(applicationContext, "Произошла ошибка!", Toast.LENGTH_SHORT)
-            toast.show()
+            Toast.makeText(this, getString(R.string.error), Toast.LENGTH_SHORT)
+                .show()
         }
     }
 
@@ -179,12 +213,12 @@ class MainActivity : AppCompatActivity() {
                                     mainObject.getJSONObject(jsonObject).getString(jsonString)
                                 }
                                 else -> {
-                                    ""
+                                    EMPTY_STRING_VALUE
                                 }
                             }
                         }
                         else -> {
-                            ""
+                            EMPTY_STRING_VALUE
                         }
                     }
                 }
@@ -194,15 +228,15 @@ class MainActivity : AppCompatActivity() {
                             mainObject.getString(jsonString)
                         }
                         else -> {
-                            ""
+                            EMPTY_STRING_VALUE
                         }
                     }
                 }
             }
         } catch (ex: Exception) {
-            validatedData = ""
-            val toast = Toast.makeText(this, "Произошла ошибка!", Toast.LENGTH_SHORT)
-            toast.show()
+            validatedData = EMPTY_STRING_VALUE
+            Toast.makeText(this, getString(R.string.error), Toast.LENGTH_SHORT)
+                .show()
         }
 
         when (validatedData) {
@@ -223,5 +257,14 @@ class MainActivity : AppCompatActivity() {
         val url = "geo:$sLatitude,$sLongitude?z=22&q=$sLatitude,$sLongitude"
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
         startActivity(intent)
+    }
+
+    companion object {
+        private const val DEFAULT_BIN = "45717360"
+        private const val JSON_KEY_BANK = "bank"
+        private const val JSON_KEY_COUNTRY = "country"
+        private const val JSON_KEY_NUMBER = "number"
+        private const val EMPTY_STRING_VALUE = ""
+        private const val URL = "https://lookup.binlist.net/"
     }
 }
